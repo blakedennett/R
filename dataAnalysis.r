@@ -63,11 +63,9 @@ df$difference <- df$High - df$Low
 df$percent_difference <- 1 - df$Low / df$High
 
 # make a column with avg open by month per year
-frst_yr <- min(df$yr)
-lst_yr <- max(df$yr)
-yrs <- frst_yr:lst_yr   # makes a list from the first to last
+yrs <- min(df$yr):max(df$yr)   # makes a list from the first to last year
 months <- min(df$month):max(df$month)
-df$avg_open_month <- 0
+df$avg_open_month_per_yr <- 0
 
 for (year in yrs) {
     for (m in months) {
@@ -76,7 +74,7 @@ for (year in yrs) {
             avg <- mean(avg_df$Open)
             # ifelse is the same as np.where in python
             if (any(df$yr == year & df$month == m)) {
-                df$avg_open_month <- ifelse(df$yr == year & df$month == m, avg, df$avg_open_month)
+                df$avg_open_month_per_yr <- ifelse(df$yr == year & df$month == m, avg, df$avg_open_month_per_yr)
             }
         }
     }
@@ -84,15 +82,39 @@ for (year in yrs) {
 
 
 # make a column of yr open avg
+df$yr_avg_open <- 0
+
+for (year in yrs) {
+    avg_df <- df[df$yr == year,]
+    avg <- mean(avg_df$Open)
+    df$yr_avg_open <- ifelse(df$yr == year, avg, df$yr_avg_open)
+}
 
 
+# plot avg open per year
+print(ggplot(df, aes(x=yr, y=yr_avg_open)) + 
+  geom_bar(stat = "identity"))
 
-print(head(df[df$avg_open_month > 0, ]))
+
+# make avg month column
+df$avg_open_per_month <- 0
+
+for (m in months) {
+    avg_df <- df[df$month == m, ]
+    avg <- mean(avg_df$Open)
+    df$avg_open_per_month <- ifelse(df$month == m, avg, df$avg_open_per_month)
+}
 
 
-
-# ================================================= plot the avg price per month
+# plot the avg price per month
+# print(ggplot(df, aes(x=month, y=avg_open_per_month)) + 
+#   geom_bar(stat = "identity"))
 
 
 
 # ================================================= find biggest jump from day one of month to last day of month
+
+
+
+
+# ================================================= find biggest jump from day one of yr to last day of yr
