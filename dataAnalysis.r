@@ -66,18 +66,28 @@ df$percent_difference <- 1 - df$Low / df$High
 frst_yr <- min(df$yr)
 lst_yr <- max(df$yr)
 yrs <- frst_yr:lst_yr   # makes a list from the first to last
-months <- 1:12
+months <- min(df$month):max(df$month)
 df$avg_open_month <- 0
 
 for (year in yrs) {
     for (m in months) {
-        avg_df <- df[yr == year & month == m,]
-        # avg_df = n_df.query(f"(yr == {yr}) & (month == {month})")
-
+        if (year != 2022 && m > 4) {
+            avg_df <- df[df$yr == year & df$month == m, ]
+            avg <- mean(avg_df$Open)
+            # ifelse is the same as np.where in python
+            if (any(df$yr == year & df$month == m)) {
+                df$avg_open_month <- ifelse(df$yr == year & df$month == m, avg, df$avg_open_month)
+            }
+        }
     }
 }
 
+print(head(df[df$avg_open_month > 0, ]))
 
-print(df[600:610, ])
+
 
 # ================================================= plot the avg price per month
+
+
+
+# =================================================find biggest jump from day one of month to last day of month
