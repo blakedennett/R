@@ -82,6 +82,11 @@ for (year in yrs) {
     }
 }
 
+
+# make a column of yr open avg
+
+
+
 print(head(df[df$avg_open_month > 0, ]))
 
 
@@ -90,4 +95,4 @@ print(head(df[df$avg_open_month > 0, ]))
 
 
 
-# =================================================find biggest jump from day one of month to last day of month
+# ================================================= find biggest jump from day one of month to last day of month
