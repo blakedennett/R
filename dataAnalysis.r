@@ -92,9 +92,11 @@ for (year in yrs) {
 
 
 # plot avg open per year
-print(ggplot(df, aes(x=yr, y=yr_avg_open)) + 
-  geom_bar(stat = "identity"))
-
+plot_yr <- function() {
+    print(ggplot(df, aes(x=yr, y=yr_avg_open)) + 
+    geom_bar(stat = "identity"))
+}
+# plot_yr()
 
 # make avg month column
 df$avg_open_per_month <- 0
@@ -107,14 +109,37 @@ for (m in months) {
 
 
 # plot the avg price per month
-# print(ggplot(df, aes(x=month, y=avg_open_per_month)) + 
-#   geom_bar(stat = "identity"))
+plot_month <- function() {
+    print(ggplot(df, aes(x=month, y=avg_open_per_month)) + 
+    geom_bar(stat = "identity"))
+}
+
+# plot_month()
 
 
 
-# ================================================= find biggest jump from day one of month to last day of month
+# find biggest jump from day one of month to last day of month
+months_31 <- list(1, 3, 5, 7, 8, 10, 12) 
+months_30 <- list(4, 6, 9, 11)
+df$month_difference <- 0
 
+for (m in months_31) {
+    for (year in yrs) {
+        df$month_difference <- ifelse(df$month == m & df$day == 31 & df$yr == year, 
+                                    df$Open - df[df$month == m & df$yr == year & df$day == 1, "Open"], 
+                                    df$month_difference)
+}}
 
+for (m in months_30) {
+    for (year in yrs) {
+        df$month_difference <- ifelse(df$month == m & df$day == 30 & df$yr == year, 
+                                    df$Open - df[df$month == m & df$yr == year & df$day == 1, "Open"], 
+                                    df$month_difference)
+}}
+# DO FEBUARY STILL ==============================================================
+# print(head(df))
+
+print(df[df$month == 6 & df$yr == 2009 & (df$day == 1 | df$day == 30), ])
 
 
 # ================================================= find biggest jump from day one of yr to last day of yr
