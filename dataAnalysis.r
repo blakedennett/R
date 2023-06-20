@@ -121,25 +121,40 @@ plot_month <- function() {
 # find biggest jump from day one of month to last day of month
 months_31 <- list(1, 3, 5, 7, 8, 10, 12) 
 months_30 <- list(4, 6, 9, 11)
+febs <- list(2)
 df$month_difference <- 0
 
-for (m in months_31) {
-    for (year in yrs) {
-        df$month_difference <- ifelse(df$month == m & df$day == 31 & df$yr == year, 
+handle_months <- function(months, end_date) {
+    for (m in months) {
+        df$month_difference <- ifelse(df$month == m & df$day == end_date & df$yr == year, 
                                     df$Open - df[df$month == m & df$yr == year & df$day == 1, "Open"], 
                                     df$month_difference)
-}}
+    }
+    return(df)
+}
 
-for (m in months_30) {
-    for (year in yrs) {
-        df$month_difference <- ifelse(df$month == m & df$day == 30 & df$yr == year, 
-                                    df$Open - df[df$month == m & df$yr == year & df$day == 1, "Open"], 
-                                    df$month_difference)
-}}
-# DO FEBUARY STILL ==============================================================
-# print(head(df))
+for (year in yrs) {
+    df <- handle_months(months_31, 31)
+    df <- handle_months(months_30, 30)
+    if (year %% 4 == 0) {
+        df <- handle_months(febs, 29)
+    } else {
+        df <- handle_months(febs, 28)
+    }
+}
 
-print(df[df$month == 6 & df$yr == 2009 & (df$day == 1 | df$day == 30), ])
+df[is.na(df)] <- 0
+
+# the biggest jump up was $43.44 and down was $78.08 
+max <- max(df$month_difference)
+min <- min(df$month_difference)
+max_date <- df[df$month_difference == max, c("month", "yr")]
+print(sprintf("The max was: %f", max))
+print(sprintf("The date was %f", max_date))
+print(sprintf("The min was: %f", min))
+
+
+# ========================================== get this date to print right
 
 
 # ================================================= find biggest jump from day one of yr to last day of yr
