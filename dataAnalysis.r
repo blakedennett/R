@@ -119,28 +119,26 @@ plot_month <- function() {
 
 
 # find biggest jump from day one of month to last day of month
-months_31 <- list(1, 3, 5, 7, 8, 10, 12) 
-months_30 <- list(4, 6, 9, 11)
-febs <- list(2)
+months <- list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12) 
 df$month_difference <- 0
 
-handle_months <- function(months, end_date) {
+handle_months <- function(months) {
     for (m in months) {
-        df$month_difference <- ifelse(df$month == m & df$day == end_date & df$yr == year, 
-                                    df$Open - df[df$month == m & df$yr == year & df$day == 1, "Open"], 
-                                    df$month_difference)
+        if ((year > 2002) || (year == 2002 && m > 4)) {
+            df$month_difference <- ifelse(df$month == m & df$day == max(df[df$yr == year & df$month == m, "day"]) & df$yr == year, 
+            df$Open - df[df$month == m & df$yr == year & df$day == min(df[df$yr == year & df$month == m, "day"]), "Open"], 
+            df$month_difference)
+
+            df$month_difference <- ifelse(df$month == m & df$yr == year, 
+            max(df[df$yr == year & df$month == m, "month_difference"]), 
+            df$month_difference)
+        }
     }
     return(df)
 }
 
 for (year in yrs) {
-    df <- handle_months(months_31, 31)
-    df <- handle_months(months_30, 30)
-    if (year %% 4 == 0) {
-        df <- handle_months(febs, 29)
-    } else {
-        df <- handle_months(febs, 28)
-    }
+    df <- handle_months(months)
 }
 
 df[is.na(df)] <- 0
@@ -148,13 +146,19 @@ df[is.na(df)] <- 0
 # the biggest jump up was $43.44 and down was $78.08 
 max <- max(df$month_difference)
 min <- min(df$month_difference)
-max_date <- df[df$month_difference == max, c("month", "yr")]
+max_date <- df[df$month_difference == max && df$day == max(df[df$yr == year & df$month == m], c("month", "yr"))]
+min_date <- df[df$month_difference == min, c("month", "yr")]
+print(typeof(max_date))
 print(sprintf("The max was: %f", max))
-print(sprintf("The date was %f", max_date))
+print(sprintf("The month and year were %d/%d", as.integer(max_date[1]), as.integer(max_date[2])))
 print(sprintf("The min was: %f", min))
+print(sprintf("The month and year were %d/%d", as.integer(min_date[1]), as.integer(min_date[2])))
 
-
-# ========================================== get this date to print right
 
 
 # ================================================= find biggest jump from day one of yr to last day of yr
+
+df$yr_difference <- 0
+
+df$yr_difference <- ifelse(df$yr == 2011 & df$month == 1 & df$day == min(df[df$yr == 2011 & df$month == 1, "day"]), 1, 0)
+print(df[df$yr == 2011 & df$month == 1, ])
