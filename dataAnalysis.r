@@ -128,10 +128,6 @@ handle_months <- function(months) {
             df$month_difference <- ifelse(df$month == m & df$day == max(df[df$yr == year & df$month == m, "day"]) & df$yr == year, 
             df$Open - df[df$month == m & df$yr == year & df$day == min(df[df$yr == year & df$month == m, "day"]), "Open"], 
             df$month_difference)
-
-            df$month_difference <- ifelse(df$month == m & df$yr == year, 
-            max(df[df$yr == year & df$month == m, "month_difference"]), 
-            df$month_difference)
         }
     }
     return(df)
@@ -143,12 +139,12 @@ for (year in yrs) {
 
 df[is.na(df)] <- 0
 
-# the biggest jump up was $43.44 and down was $78.08 
+# the biggest jump up was $ and down was $ 
 max <- max(df$month_difference)
 min <- min(df$month_difference)
-max_date <- df[df$month_difference == max && df$day == max(df[df$yr == year & df$month == m], c("month", "yr"))]
-min_date <- df[df$month_difference == min, c("month", "yr")]
-print(typeof(max_date))
+max_date <- df[df$month_difference == max & df$day == max(df[ , "day"]), c("month", "yr")]
+min_date <- df[df$month_difference == min & df$day == max(df[ , "day"]), c("month", "yr")]
+# print(min_date)
 print(sprintf("The max was: %f", max))
 print(sprintf("The month and year were %d/%d", as.integer(max_date[1]), as.integer(max_date[2])))
 print(sprintf("The min was: %f", min))
