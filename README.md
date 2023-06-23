@@ -6,7 +6,7 @@ Like my data analysis project, I used a stock market dataset from Kaggle.com. Th
 
 Work done: Practiced with r syntax, made some new columns to get further knowldedge of the dataset, and got two visualizations up. 
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/pn3aRgHPn7A)
 
 # Visuals
 
