@@ -29,21 +29,21 @@ df$High
 print(mean(df$High))
 
 # first item specifies rows, second specifies column(s)
-# print(df[1:5, "High"])
+print(df[1:5, "High"])
 
 # gets the volume and open of the first 5 columns
-# print(df[1:5, c("Volume", "Open", "Close")])
+print(df[1:5, c("Volume", "Open", "Close")])
 
 # gets the close if greater than 600
-# print(df[df$Close > 670, 1:ncol(df)])
+print(df[df$Close > 670, 1:ncol(df)])
 
 # tidyvers version of previous line
-# print(
-#     df %>%
-#         select(Date, High, Low, Open, Close) %>%
-#         filter(Close > 680) %>%
-#         arrange(desc(Close))
-# )
+print(
+    df %>%
+        select(Date, High, Low, Open, Close) %>%
+        filter(Close > 680) %>%
+        arrange(desc(Close))
+)
 
 
 # adding parts of the date to the df
@@ -96,7 +96,7 @@ plot_yr <- function() {
     print(ggplot(df, aes(x=yr, y=yr_avg_open)) + 
     geom_bar(stat = "identity"))
 }
-# plot_yr()
+plot_yr()
 
 # make avg month column
 df$avg_open_per_month <- 0
@@ -144,23 +144,35 @@ max <- max(df$month_difference)
 min <- min(df$month_difference)
 max_date <- df[df$month_difference == max & df$day == max(df[ , "day"]), c("month", "yr")]
 min_date <- df[df$month_difference == min & df$day == max(df[ , "day"]), c("month", "yr")]
+print("===========================================================================================")
+print("Biggest changes from day one of month to last day of month")
 print(sprintf("The max was: %.2f", max))
 print(sprintf("The month and year were %d/%d", as.integer(max_date[1]), as.integer(max_date[2])))
 print(sprintf("The min was: %.2f", min))
 print(sprintf("The month and year were %d/%d", as.integer(min_date[1]), as.integer(min_date[2])))
+print("===========================================================================================")
 
 
 
 # find biggest jump from day one of yr to last day of yr
-
 df$yr_difference <- 0
 
-last_day_open <- df[df$yr == year & df$month == 12 & df$day == max(df[ , "day"]), "Open"]
-
 for (year in yrs) {
-    df$year_difference <- ifelse(df$yr == year & df$month == min(df[ , "month"]) & df$day == min(df[ , "day"]), 
-    df[last_day_open] - df$Open,
-    df$yr_difference)
+    if (year != 2002) {
+        df$yr_difference <- ifelse(df$yr == year & df$month == 1 & df$day == min(df[df$yr == year & df$month == 1, "day"]), 
+        df[df$yr == year & df$month == 12 & df$day == max(df[ , "day"]), "Open"] - df$Open,
+        df$yr_difference)
+    }
 }
 
-print(df[df$yr == 2011 & df$month == 1 & df$day < 5, ])
+df[is.na(df)] <- 0
+
+max <- max(df$yr_difference)
+min <- min(df$yr_difference)
+max_yr <- df[df$yr_difference == max, "yr"]
+min_yr <- df[df$yr_difference == min, "yr"]
+print("Biggest changes from day one of year to last day of year")
+print(sprintf("The max was: %.2f", max))
+print(sprintf("The year was %.0f", as.integer(max_yr)))
+print(sprintf("The min was: %.2f", min))
+print(sprintf("The year was %.0f", as.integer(min_yr)))
