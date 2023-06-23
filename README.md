@@ -1,31 +1,25 @@
 # Overview
 
-{Important! Do not say in this section that this is college assignment. Talk about what you are trying to accomplish as a software engineer to further your learning.}
+I chose to do this project so that I could get some brief experience using the R programming language.  
 
-{Provide a description of the software that you wrote to demonstrate the R language.}
+Like my data analysis project, I used a stock market dataset from Kaggle.com. This time though, I only used data on Netflix so that the download of the dataset was much faster. I was able to learn quite a bit and enjoyed programming in this language. 
 
-{Describe your purpose for writing this software.}
-
-{Provide a link to your YouTube demonstration. It should be a 4-5 minute demo of the software running and a walkthrough of the code. Focus should be on sharing what you learned about the language syntax.}
+Work done: Practiced with r syntax, made some new columns to get further knowldedge of the dataset, and got two visualizations up. 
 
 [Software Demo Video](http://youtube.link.goes.here)
 
-# Development Environment
+# Visuals
 
-{Describe the tools that you used to develop the software}
+<div>
+  <img src="./OpenbyYear.png", height="500"><br>
+</div>
 
-{Describe the programming language that you used and any libraries.}
+<div>
+  <img src="./MonthOpen.png", height="500"><br>
+</div>
 
-# Useful Websites
 
-{Make a list of websites that you found helpful in this project}
+# Github Link
 
 - https://github.com/blakedennett/R
-- [Web Site Name](http://url.link.goes.here)
 
-# Future Work
-
-{Make a list of things that you need to fix, improve, and add in the future.}
-
-- get a dataset
-- get a chart
